@@ -1,0 +1,6 @@
+brian2>=2.7
+numpy
+pandas
+pyarrow
+websockets>=12
+requests

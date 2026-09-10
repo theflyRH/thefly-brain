@@ -1,0 +1,35 @@
+name: Reproduce MN9 result
+
+# Runs the whole-brain model on GitHub's own machines: sugar drive vs rest vs shuffled wiring.
+# Anyone can read the log of this run or re-run it; the numbers do not depend on us.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -r requirements.txt cython setuptools
+      - name: Download FlyWire v783 tables (Shiu et al. repository)
+        run: bash data/download.sh
+      - name: Real connectome, sugar vs rest (300 ms of brain time)
+        run: python bench.py --duration 300 --stimuli sugar,idle --codegen cython | tee bench_real.log
+      - name: Control, shuffled wiring, sugar
+        run: python bench.py --duration 300 --stimuli sugar --shuffle --codegen cython | tee bench_shuffled.log
+      - name: Summary
+        run: |
+          { echo "## MN9 read-out"; echo; echo '```'; grep -E "^(sugar|idle|CONTROL)" bench_real.log bench_shuffled.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bench-logs
+          path: "*.log"

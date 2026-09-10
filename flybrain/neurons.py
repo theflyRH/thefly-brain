@@ -1,0 +1,40 @@
+"""FlyWire root ids of the neurons we stimulate and read out.
+
+Lists come from Shiu et al. 2024 (figures.ipynb). They were assigned on
+FlyWire v630; the ones below were verified to still exist in the v783
+completeness table with the expected annotation (classification.csv.gz:
+sub_class 'sugar/water', 'bitter', 'ingestion_motor_neuron').
+Ids not present in the loaded dataset are dropped at load time.
+"""
+
+# labellar sugar-sensing GRNs, right hemisphere
+SUGAR_GRN_R = [
+    720575940624963786, 720575940630233916, 720575940637568838, 720575940638202345, 720575940617000768,
+    720575940630797113, 720575940632889389, 720575940621754367, 720575940621502051, 720575940640649691,
+    720575940639332736, 720575940616885538, 720575940639198653, 720575940620900446, 720575940617937543,
+    720575940632425919, 720575940633143833, 720575940612670570, 720575940628853239, 720575940629176663,
+    720575940611875570,
+]
+
+# labellar bitter-sensing GRNs, right hemisphere
+BITTER_GRN_R = [
+    720575940621778381, 720575940602353632, 720575940617094208, 720575940619197093, 720575940626287336,
+    720575940618600651, 720575940627692048, 720575940630195909, 720575940646212996, 720575940610483162,
+    720575940645743412, 720575940627578156, 720575940622298631, 720575940621008895, 720575940629146711,
+    720575940610259370, 720575940610481370, 720575940619028208, 720575940614281266, 720575940613061118,
+    720575940604027168,
+]
+
+# MN9: proboscis extension motor neuron (left; right = 720575940645521262, absent from v783 table)
+MN9_L = 720575940660219265
+MN9_R = 720575940645521262
+
+# giant fiber, escape circuit (v783 ids from FlyWire annotations; used for the "looming" stimulus)
+GIANT_FIBER = [720575940616185531, 720575940629806974]  # DN1_1 / DN2 ids used by Shiu for descending readout
+
+STIMULI = {
+    "sugar": SUGAR_GRN_R,
+    "bitter": BITTER_GRN_R,
+    "looming": GIANT_FIBER,
+    "idle": [],
+}
